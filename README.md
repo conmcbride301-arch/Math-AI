@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connor's Classroom Lock System</title>
+<title>Connor's Ultimate System - Lock & Mental Health AI</title>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -172,9 +172,6 @@ body {
   width: 250px;
   text-align: center;
 }
-#bypass::placeholder {
-  color: rgba(255,255,255,0.6);
-}
 
 /* 💬 CHAT AREA */
 .chat-container {
@@ -249,6 +246,11 @@ body {
   text-align: center;
   font-weight: 600;
   max-width: 90%;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #00AA00;
 }
 
 /* 💬 CHATGPT-STYLE INPUT BAR */
@@ -333,10 +335,6 @@ body {
   transform: none;
 }
 
-#sendBtn:active:not(:disabled), #enterBtn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
 #enterBtn {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
   box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
@@ -360,22 +358,6 @@ body {
   .timer {
     font-size: 2.5em;
   }
-  .chat-input-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  #chatInput {
-    font-size: 14px;
-    padding: 12px 16px;
-  }
-  .button-group {
-    width: 100%;
-  }
-  #sendBtn, #enterBtn {
-    flex: 1;
-    padding: 12px;
-    font-size: 14px;
-  }
 }
 
 /* Scrollbar styling */
@@ -390,10 +372,6 @@ body {
 .chat-messages::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 4px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 </style>
 </head>
@@ -424,21 +402,21 @@ body {
 <!-- 💬 CHAT AREA -->
 <div class="chat-container">
   <div class="chat-header">
-    <h2>💬 Connor's Chat System</h2>
+    <h2>💬 Connor's AI System - Mental Health & Commands</h2>
   </div>
   <div class="chat-messages" id="chatMessages">
     <div class="message system">
-      🔥 System loaded. Type /admin to enable admin mode.
+      🔥 System loaded. Type /admin to enable admin mode. Ask about mental health or use commands!
     </div>
   </div>
 </div>
 
-<!-- 💬 CHATGPT-STYLE INPUT BAR -->
+<!-- 💬 INPUT BAR -->
 <div class="chat-input-container">
   <div class="chat-input-wrapper">
     <textarea 
       id="chatInput" 
-      placeholder="Message Connor's system..." 
+      placeholder="Ask about mental health or type commands..." 
       rows="1"
       autocomplete="off"
     ></textarea>
@@ -456,7 +434,7 @@ body {
 </audio>
 
 <script>
-/* 🔥 FIREBASE CONFIG - REPLACE WITH YOUR OWN */
+/* 🔥 FIREBASE CONFIG */
 firebase.initializeApp({
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -470,5 +448,16 @@ const ref = db.ref("lockState");
 const lock = document.getElementById("lock");
 const timer = document.getElementById("time");
 const music = document.getElementById("music");
-const admin
+const adminBadge = document.getElementById("adminBadge");
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+const enterBtn = document.getElementById("enterBtn");
 
+let endTime = null;
+let isAdmin = false;
+
+// Mental Health Database
+const mentalIllnesses = {
+  depression: { category: "Mood Disorder", keyDifferentiator: "Feeling very sad and losing interest", primarySymptoms: ["Feeling sad", "Tired", "Not enjoying things", "Sleeping too much or too little", "Eating too much or too little"], treatment: "Talk to a counselor, practice healthy habits" },
+  bipolar: { category: "Mood Disorder
