@@ -18,6 +18,7 @@ body {
   background-size: 400% 400%;
   animation: bg 10s infinite alternate;
   overflow-x: hidden;
+  padding-bottom: 100px;
 }
 @keyframes bg {
   0% { background-position: 0%; }
@@ -175,54 +176,163 @@ body {
   color: rgba(255,255,255,0.6);
 }
 
-/* ⌨️ TYPE AREA */
-.type-area {
+/* 💬 CHAT AREA */
+.chat-container {
   max-width: 900px;
-  margin: 80px auto 40px;
-  padding: 30px;
+  margin: 80px auto 120px;
   background: rgba(255,255,255,0.95);
   border-radius: 16px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, #005eff, #00ff9d);
+  color: white;
+  padding: 20px 30px;
   text-align: center;
 }
-.type-area h2 {
+
+.chat-header h2 {
   font-weight: 900;
   font-size: 2em;
-  margin-bottom: 10px;
+  margin: 0;
+}
+
+.chat-messages {
+  height: 500px;
+  overflow-y: auto;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+.message {
+  margin-bottom: 15px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  max-width: 70%;
+  word-wrap: break-word;
+  animation: messageSlide 0.3s ease;
+}
+
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message.user {
+  background: linear-gradient(135deg, #005eff, #0047cc);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.message.assistant {
+  background: white;
   color: #333;
+  border: 2px solid #e0e0e0;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
 }
-.type-area p {
-  color: #666;
-  margin-bottom: 20px;
-  font-size: 1.1em;
+
+.message.system {
+  background: #fff3cd;
+  color: #856404;
+  border: 2px solid #ffc107;
+  margin: 0 auto;
+  text-align: center;
+  font-weight: 600;
+  max-width: 90%;
 }
-#mainInput {
-  width: 100%;
-  height: 250px;
+
+/* 💬 CHATGPT-STYLE INPUT BAR */
+.chat-input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.98);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid #e0e0e0;
   padding: 15px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: 3px solid #005eff;
-  resize: none;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.chat-input-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#chatInput {
+  flex: 1;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: 2px solid #d0d0d0;
+  border-radius: 25px;
+  background: white;
   font-family: 'Inter', Arial, sans-serif;
-  line-height: 1.6;
+  resize: none;
+  max-height: 150px;
+  transition: all 0.3s ease;
 }
-#mainInput:focus {
+
+#chatInput:focus {
   outline: none;
-  border-color: #00ff9d;
-  box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+  border-color: #005eff;
+  box-shadow: 0 0 0 3px rgba(0, 94, 255, 0.1);
 }
-#mainInput:disabled {
-  background: #eee;
-  opacity: 0.6;
+
+#chatInput:disabled {
+  background: #f5f5f5;
   cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#sendBtn {
+  background: linear-gradient(135deg, #005eff, #0047cc);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 94, 255, 0.3);
+}
+
+#sendBtn:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 94, 255, 0.5);
+}
+
+#sendBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#sendBtn:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
 /* 📱 RESPONSIVE */
 @media (max-width: 768px) {
-  .type-area {
-    margin: 40px 20px;
-    padding: 20px;
+  .chat-container {
+    margin: 40px 10px 120px;
   }
   .lock-box {
     padding: 30px 20px;
@@ -233,6 +343,36 @@ body {
   .timer {
     font-size: 2.5em;
   }
+  .chat-input-wrapper {
+    padding: 0 10px;
+  }
+  #chatInput {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+  #sendBtn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+}
+
+/* Scrollbar styling */
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
 </head>
@@ -260,18 +400,34 @@ body {
   </div>
 </div>
 
-<!-- ⌨️ TYPE AREA -->
-<div class="type-area">
-  <h2>Connor's Typing Area</h2>
-  <p>Start typing below. Admin can lock this remotely.</p>
-  <textarea id="mainInput" placeholder="Start typing here..." spellcheck="true"></textarea>
+<!-- 💬 CHAT AREA -->
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>💬 Connor's Chat System</h2>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="message system">
+      🔥 System loaded. Type /admin to enable admin mode.
+    </div>
+  </div>
+</div>
+
+<!-- 💬 CHATGPT-STYLE INPUT BAR -->
+<div class="chat-input-container">
+  <div class="chat-input-wrapper">
+    <textarea 
+      id="chatInput" 
+      placeholder="Message Connor's system..." 
+      rows="1"
+      autocomplete="off"
+    ></textarea>
+    <button id="sendBtn">➤</button>
+  </div>
 </div>
 
 <!-- 🎵 MUSIC -->
 <audio id="music" loop preload="auto">
-  <!-- Add your country music file here -->
   <source src="country.mp3" type="audio/mpeg">
-  <!-- Fallback to online source if local file not found -->
   <source src="https://www.bensound.com/bensound-music/bensound-country.mp3" type="audio/mpeg">
 </audio>
 
@@ -290,8 +446,10 @@ const ref = db.ref("lockState");
 const lock = document.getElementById("lock");
 const timer = document.getElementById("time");
 const music = document.getElementById("music");
-const inputBox = document.getElementById("mainInput");
 const adminBadge = document.getElementById("adminBadge");
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
 
 let endTime = null;
 let isAdmin = false;
@@ -304,129 +462,18 @@ music.addEventListener('volumechange', () => {
   }
 });
 
-/* 🌍 GLOBAL LOCK LISTENER */
-ref.on("value", snap => {
-  const data = snap.val();
-  
-  // If admin, don't lock them
-  if (isAdmin) {
-    unlock();
-    return;
-  }
-  
-  if (!data || !data.locked) {
-    unlock();
-    return;
-  }
-
-  if (Date.now() < data.until) {
-    lockSite(data.until);
-  } else {
-    unlock();
-  }
-});
-
-/* 🔒 LOCK FUNCTION */
-function lockSite(until) {
-  endTime = until;
-  lock.classList.add("active");
-  inputBox.disabled = true;
-  
-  // Try to play music (may be blocked by browser)
-  music.play().catch(err => {
-    console.log("Autoplay blocked, user interaction needed");
-  });
+/* 💬 CHAT FUNCTIONS */
+function addMessage(text, type = 'user') {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message \${type}`;
+  messageDiv.textContent = text;
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-/* 🔓 UNLOCK FUNCTION */
-function unlock() {
-  lock.classList.remove("active");
-  inputBox.disabled = false;
-  music.pause();
-  music.currentTime = 0;
-  endTime = null;
-}
-
-/* ⏱ TIMER UPDATE */
-setInterval(() => {
-  if (!endTime) return;
+function handleCommand(command) {
+  const cmd = command.toLowerCase().trim();
   
-  const remaining = Math.max(0, endTime - Date.now());
-  const minutes = Math.floor(remaining / 60000);
-  const seconds = Math.floor((remaining % 60000) / 1000);
-  
-  timer.textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  
-  // Auto-unlock when time's up
-  if (remaining === 0) {
-    ref.set({ locked: false });
-  }
-}, 1000);
-
-/* 🔐 HIDDEN COMMANDS */
-let buffer = "";
-document.addEventListener("keydown", e => {
-  buffer += e.key;
-  buffer = buffer.slice(-7); // Track last 7 characters
-
-  // Admin mode toggle
-  if (buffer.includes("/admin")) {
+  if (cmd === '/admin') {
     isAdmin = !isAdmin;
-    adminBadge.classList.toggle("active", isAdmin);
-    unlock(); // Unlock admin immediately
-    buffer = "";
-    console.log("Admin mode:", isAdmin ? "ON" : "OFF");
-  }
-
-  // Lock command (only works if admin)
-  if (buffer.includes("/lock") && isAdmin) {
-    ref.set({ 
-      locked: true, 
-      until: Date.now() + 30 * 60 * 1000 // 30 minutes
-    });
-    buffer = "";
-    console.log("🔒 LOCK ACTIVATED");
-  }
-
-  // Unlock command (only works if admin)
-  if (buffer.includes("/unlock") && isAdmin) {
-    ref.set({ locked: false });
-    buffer = "";
-    console.log("🔓 UNLOCKED");
-  }
-});
-
-/* 🎓 TEACHER BYPASS */
-document.getElementById("bypass").addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    const code = e.target.value.trim();
-    
-    // Teacher bypass code
-    if (code === "202031") {
-      ref.set({ locked: false });
-      e.target.value = "";
-      console.log("✅ Teacher bypass successful");
-    } else if (code !== "") {
-      e.target.value = "";
-      e.target.placeholder = "❌ Wrong code";
-      setTimeout(() => {
-        e.target.placeholder = "Enter code...";
-      }, 2000);
-    }
-  }
-});
-
-/* 🎵 CLICK TO ENABLE AUDIO (for browsers that block autoplay) */
-document.body.addEventListener('click', () => {
-  if (lock.classList.contains('active') && music.paused) {
-    music.play().catch(() => {});
-  }
-}, { once: true });
-
-console.log("🔥 Connor's Lock System Loaded");
-console.log("Commands: /admin (toggle), /lock (admin only), /unlock (admin only)");
-console.log("Teacher bypass: 202031");
-</script>
-
-</body>
-</html>
+    adminBadge.classList
