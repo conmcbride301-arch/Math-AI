@@ -361,14 +361,19 @@ body {
     font-size: 2.5em;
   }
   .chat-input-wrapper {
-    padding: 0 10px;
+    flex-direction: column;
+    align-items: stretch;
   }
   #chatInput {
     font-size: 14px;
     padding: 12px 16px;
   }
+  .button-group {
+    width: 100%;
+  }
   #sendBtn, #enterBtn {
-    padding: 10px 16px;
+    flex: 1;
+    padding: 12px;
     font-size: 14px;
   }
 }
@@ -465,7 +470,5 @@ const ref = db.ref("lockState");
 const lock = document.getElementById("lock");
 const timer = document.getElementById("time");
 const music = document.getElementById("music");
-const adminBadge = document.getElementById("adminBadge");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-const sendBtn
+const admin
+
