@@ -270,7 +270,7 @@ body {
   margin: 0 auto;
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: flex-end;
 }
 
 #chatInput {
@@ -283,6 +283,7 @@ body {
   font-family: 'Inter', Arial, sans-serif;
   resize: none;
   max-height: 150px;
+  min-height: 50px;
   transition: all 0.3s ease;
 }
 
@@ -298,35 +299,51 @@ body {
   opacity: 0.6;
 }
 
-#sendBtn {
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+#sendBtn, #enterBtn {
   background: linear-gradient(135deg, #005eff, #0047cc);
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
+  border-radius: 25px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 94, 255, 0.3);
+  white-space: nowrap;
 }
 
-#sendBtn:hover:not(:disabled) {
-  transform: scale(1.1);
+#sendBtn:hover:not(:disabled), #enterBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 94, 255, 0.5);
 }
 
-#sendBtn:disabled {
+#sendBtn:disabled, #enterBtn:disabled {
   background: #ccc;
   cursor: not-allowed;
   transform: none;
 }
 
-#sendBtn:active:not(:disabled) {
-  transform: scale(0.95);
+#sendBtn:active:not(:disabled), #enterBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+#enterBtn {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+#enterBtn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
 }
 
 /* 📱 RESPONSIVE */
@@ -350,10 +367,9 @@ body {
     font-size: 14px;
     padding: 12px 16px;
   }
-  #sendBtn {
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
+  #sendBtn, #enterBtn {
+    padding: 10px 16px;
+    font-size: 14px;
   }
 }
 
@@ -421,7 +437,10 @@ body {
       rows="1"
       autocomplete="off"
     ></textarea>
-    <button id="sendBtn">➤</button>
+    <div class="button-group">
+      <button id="enterBtn">↵ Enter</button>
+      <button id="sendBtn">➤ Send</button>
+    </div>
   </div>
 </div>
 
@@ -449,31 +468,4 @@ const music = document.getElementById("music");
 const adminBadge = document.getElementById("adminBadge");
 const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
-const sendBtn = document.getElementById("sendBtn");
-
-let endTime = null;
-let isAdmin = false;
-
-// Lock volume at 70% and prevent changes
-music.volume = 0.7;
-music.addEventListener('volumechange', () => {
-  if (lock.classList.contains('active')) {
-    music.volume = 0.7;
-  }
-});
-
-/* 💬 CHAT FUNCTIONS */
-function addMessage(text, type = 'user') {
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `message \${type}`;
-  messageDiv.textContent = text;
-  chatMessages.appendChild(messageDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function handleCommand(command) {
-  const cmd = command.toLowerCase().trim();
-  
-  if (cmd === '/admin') {
-    isAdmin = !isAdmin;
-    adminBadge.classList
+const sendBtn
