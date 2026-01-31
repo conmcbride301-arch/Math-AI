@@ -3,16 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connor's Ultimate System - Lock & Mental Health AI</title>
+<title>Connor's Ultimate System - Lock & Math Helper</title>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* 🌈 ANIMATED BACKGROUND */
 body {
-  margin: 0;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   background: linear-gradient(120deg, #005eff, #00ff9d, #ff0033);
   background-size: 400% 400%;
@@ -210,6 +215,7 @@ body {
   max-width: 70%;
   word-wrap: break-word;
   animation: messageSlide 0.3s ease;
+  line-height: 1.6;
 }
 
 @keyframes messageSlide {
@@ -250,10 +256,10 @@ body {
 
 .highlight {
   font-weight: bold;
-  color: #00AA00;
+  color: #0066ff;
 }
 
-/* 💬 CHATGPT-STYLE INPUT BAR */
+/* 💬 INPUT BAR */
 .chat-input-container {
   position: fixed;
   bottom: 0;
@@ -358,9 +364,18 @@ body {
   .timer {
     font-size: 2.5em;
   }
+  .chat-input-wrapper {
+    flex-direction: column;
+  }
+  .button-group {
+    width: 100%;
+  }
+  #sendBtn, #enterBtn {
+    flex: 1;
+  }
 }
 
-/* Scrollbar styling */
+/* Scrollbar */
 .chat-messages::-webkit-scrollbar {
   width: 8px;
 }
@@ -402,13 +417,9 @@ body {
 <!-- 💬 CHAT AREA -->
 <div class="chat-container">
   <div class="chat-header">
-    <h2>💬 Connor's AI System - Mental Health & Commands</h2>
+    <h2>📐 Connor's Math Helper AI</h2>
   </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="message system">
-      🔥 System loaded. Type /admin to enable admin mode. Ask about mental health or use commands!
-    </div>
-  </div>
+  <div class="chat-messages" id="chatMessages"></div>
 </div>
 
 <!-- 💬 INPUT BAR -->
@@ -416,7 +427,7 @@ body {
   <div class="chat-input-wrapper">
     <textarea 
       id="chatInput" 
-      placeholder="Ask about mental health or type commands..." 
+      placeholder="Ask me about math topics or type commands..." 
       rows="1"
       autocomplete="off"
     ></textarea>
@@ -445,6 +456,7 @@ firebase.initializeApp({
 const db = firebase.database();
 const ref = db.ref("lockState");
 
+// DOM Elements
 const lock = document.getElementById("lock");
 const timer = document.getElementById("time");
 const music = document.getElementById("music");
@@ -453,11 +465,14 @@ const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
 const sendBtn = document.getElementById("sendBtn");
 const enterBtn = document.getElementById("enterBtn");
+const bypassInput = document.getElementById("bypass");
 
 let endTime = null;
 let isAdmin = false;
 
-// Mental Health Database
-const mentalIllnesses = {
-  depression: { category: "Mood Disorder", keyDifferentiator: "Feeling very sad and losing interest", primarySymptoms: ["Feeling sad", "Tired", "Not enjoying things", "Sleeping too much or too little", "Eating too much or too little"], treatment: "Talk to a counselor, practice healthy habits" },
-  bipolar: { category: "Mood Disorder
+// 📐 MIDDLE SCHOOL MATH DATABASE
+const mathTopics = {
+  fractions: {
+    category: "Numbers & Operations",
+    definition: "A fraction represents a part of a whole",
+    examples: ["
